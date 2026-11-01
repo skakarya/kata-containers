@@ -35,6 +35,8 @@ pub struct ContainerInner {
     pub(crate) volumes: Vec<Arc<dyn Volume>>,
     pub(crate) linux_resources: Option<LinuxResources>,
     removed_from_agent: bool,
+    /// The memory ceiling the container was given in a guest sized from the pod.
+    pub(crate) applied_ceiling: Option<u64>,
 }
 
 impl ContainerInner {
@@ -53,6 +55,7 @@ impl ContainerInner {
             volumes: vec![],
             linux_resources,
             removed_from_agent: false,
+            applied_ceiling: None,
         }
     }
 
