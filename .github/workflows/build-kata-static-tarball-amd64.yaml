@@ -16,6 +16,10 @@ on:
       commit-hash:
         required: false
         type: string
+      source-repository:
+        required: false
+        type: string
+        default: kata-containers/kata-containers
       target-branch:
         required: false
         type: string
@@ -24,7 +28,7 @@ on:
       QUAY_DEPLOYER_PASSWORD:
         required: false
       KBUILD_SIGN_PIN:
-        required: true
+        required: false
 
 permissions: {}
 
@@ -85,6 +89,7 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0 # This is needed in order to keep the commit ids history
@@ -182,6 +187,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0
@@ -246,6 +252,7 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0 # This is needed in order to keep the commit ids history
@@ -369,6 +376,7 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0 # This is needed in order to keep the commit ids history
@@ -425,6 +433,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0
@@ -516,6 +525,7 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0 # This is needed in order to keep the commit ids history
@@ -563,6 +573,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          repository: ${{ inputs.source-repository }}
           ref: ${{ inputs.commit-hash }}
           allow-unsafe-pr-checkout: true
           fetch-depth: 0
