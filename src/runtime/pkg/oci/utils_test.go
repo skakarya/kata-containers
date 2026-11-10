@@ -816,6 +816,45 @@ func TestAddHypervisorAnnotations(t *testing.T) {
 	assert.Error(err)
 }
 
+func TestHugePagesPodSizingAnnotation(t *testing.T) {
+	const key = vcAnnotations.HugePagesPodSizing
+	for _, tc := range []struct {
+		name      string
+		value     string
+		annotated bool
+		allowed   bool
+		initial   bool
+		want      bool
+		wantError bool
+	}{
+		{name: "absent leaves default off", allowed: true},
+		{name: "allowed annotation opts in", value: "true", annotated: true, allowed: true, want: true},
+		{name: "allowed annotation opts out", value: "false", annotated: true, allowed: true, initial: true},
+		{name: "invalid value is rejected", value: "maybe", annotated: true, allowed: true, wantError: true},
+		{name: "disallowed annotation is rejected", value: "true", annotated: true, wantError: true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			runtimeConfig := RuntimeConfig{HypervisorType: vc.QemuHypervisor}
+			if tc.allowed {
+				runtimeConfig.HypervisorConfig.EnableAnnotations = []string{"enable_hugepages_pod_sizing"}
+			}
+			spec := specs.Spec{Annotations: map[string]string{}}
+			if tc.annotated {
+				spec.Annotations[key] = tc.value
+			}
+			sandbox := vc.SandboxConfig{Annotations: map[string]string{}}
+			sandbox.HypervisorConfig.HugePagesPodSizing = tc.initial
+			err := addAnnotations(spec, &sandbox, runtimeConfig)
+			if tc.wantError {
+				assert.Error(t, err)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tc.want, sandbox.HypervisorConfig.HugePagesPodSizing)
+		})
+	}
+}
+
 func TestBlockDeviceSectorSizeAnnotations(t *testing.T) {
 	assert := assert.New(t)
 

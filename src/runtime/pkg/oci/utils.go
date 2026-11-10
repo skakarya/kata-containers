@@ -779,6 +779,12 @@ func addHypervisorPCIeSwitchPortOverrides(ocispec specs.Spec, sbConfig *vc.Sandb
 
 func addHypervisorMemoryOverrides(ocispec specs.Spec, sbConfig *vc.SandboxConfig, runtime RuntimeConfig) error {
 
+	if err := newAnnotationConfiguration(ocispec, vcAnnotations.HugePagesPodSizing).setBool(func(podSizing bool) {
+		sbConfig.HypervisorConfig.HugePagesPodSizing = podSizing
+	}); err != nil {
+		return err
+	}
+
 	if err := newAnnotationConfiguration(ocispec, vcAnnotations.DefaultMemory).setUintWithCheck(func(memorySz uint64) error {
 		if memorySz < vc.MinHypervisorMemory && sbConfig.HypervisorType != vc.RemoteHypervisor {
 			return fmt.Errorf("Memory specified in annotation %s is less than minimum required %d, please specify a larger value", vcAnnotations.DefaultMemory, vc.MinHypervisorMemory)

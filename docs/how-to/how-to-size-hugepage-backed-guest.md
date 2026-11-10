@@ -9,6 +9,13 @@ reservation. The CRI does not pass that reservation to the runtime, so the
 runtime reads the `hugetlb.<size>.max` the kubelet set on the pod's cgroup,
 which includes the runtime class's pod overhead. The host must use cgroup v2.
 
+An installation can leave the setting false in its runtime configuration and
+allow `enable_hugepages_pod_sizing` in `enable_annotations`. A pod then opts in
+with `io.katacontainers.config.hypervisor.enable_hugepages_pod_sizing: "true"`.
+Pods without the annotation retain the installation's existing sizing path.
+The opt-in pod must still reserve enough huge pages for both its containers
+and the guest itself, through runtime class overhead or a pod-level resource.
+
 Inside the guest, a container's own `hugepages-<size>` is its memory
 ceiling. Its `memory` limit only covers what the sandbox uses on the host,
 so it can stay small and the pod still be Guaranteed. A container without
