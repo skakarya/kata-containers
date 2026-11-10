@@ -156,6 +156,9 @@ const (
 	// DefaultMemory is a sandbox annotation for the memory assigned for a VM by the hypervisor.
 	DefaultMemory = kataAnnotHypervisorPrefix + "default_memory"
 
+	// HugePagesPodSizing opts a huge page backed sandbox into sizing its VM from the pod reservation.
+	HugePagesPodSizing = kataAnnotHypervisorPrefix + "enable_hugepages_pod_sizing"
+
 	// MemSlots is a sandbox annotation to specify the memory slots assigned to the VM by the hypervisor.
 	MemSlots = kataAnnotHypervisorPrefix + "memory_slots"
 
